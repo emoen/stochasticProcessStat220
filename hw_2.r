@@ -1,3 +1,4 @@
+#oppgave 2.1
 n=12
 i=replicate(n, 0)
 w=replicate(n, 0)
@@ -25,3 +26,33 @@ print(w)
 #[1] 0.0625
 3/32
 #[1] 0.09375
+
+##################
+#oppgave 2.2 d
+n = 4
+I = rbinom(n, 1, 0.5)
+j =1:n
+U = 0
+
+for (j in 1:n){
+    U = U +(2^-j)*I[j]
+    next
+}
+
+# assert ( I = c(1,1,1,1) ) => K=15 ) ok
+K =0
+for (j in 1:n){
+    print(j)
+    if (I[n-j+1]==1)
+        K = K+2^(j-1)
+    next
+}
+K
+
+Ank = matrix(list(), nrow=n, ncol=2)
+for (j in 1:n){
+   print(K)
+   Ank[[j,1]] = K[j]/n
+   Ank[[j,2]] = K[j]+1/n
+   next
+}
