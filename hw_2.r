@@ -49,10 +49,21 @@ for (j in 1:n){
 }
 K
 
-Ank = matrix(list(), nrow=n, ncol=2)
-for (j in 1:n){
-   print(K)
-   Ank[[j,1]] = K[j]/n
-   Ank[[j,2]] = K[j]+1/n
-   next
+# Upper bound of matrix (Ank[[j,2]]) is exclusive
+Ank = matrix(list(), nrow=2^n, ncol=2)
+for (j in 1:2^n){
+   print(j/n)
+   Ank[[j,1]] = (j-1)/2^n
+   Ank[[j,2]] = j/2^n
+   next 
+}
+
+
+x=runif(n=1, min=0, max=.9999999999)
+Fn_x=0
+for (j in 0:((2^n)-1)) {
+    if (x >= Ank[[j+1,1]] && x < Ank[[j+1,2]]) {
+        print(j)
+        Fn_x = Fn_x + (j+1)/(2^n)
+    }
 }
