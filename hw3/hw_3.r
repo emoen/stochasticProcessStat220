@@ -33,12 +33,17 @@ U_sort = U_output$x
 U_idx = U_output$ix
 Z_sorted = Z[order(U_idx)]
 V = c(1:m)
+Y = c(1:m)
 for (j in 1:n){
     for (i in 1:m) {
-        V[j] = V[j] + U_sort[m*(j-1)+i] 
+        V[j] = V[j] + U_sort[m*(j-1)+i]
+        Y[j] = Y[j] + Z_sorted[m*(j-1)+i]        
     }
     V[j] = (1/m)*V[j]
+    Y[j] = (1/m)*Y[j]
 }
+plot(c(1:m), Y, type="l", col="red")
+lines(Y, col="blue")
 
 
 
