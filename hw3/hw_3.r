@@ -58,9 +58,10 @@ plot(Y,V)
 
 #***************************
 # The two variables are independent because the plot is caotic. (Looks like 'snow')
+#***************************
 
 #4.5
-N=10^4
+N=10^6
 blodtype = c(0.34,0.408, 0.068, 0.034, 0.06, 0.072, 0.012, 0.0006)
 accum_blodtype = 0
 n = c(0,0,0,0,0,0,0,0)
@@ -70,12 +71,21 @@ size_accum = 0
 for (i in 1:8) {
     p[i] = blodtype[i]/(1-accum_blodtype)
     accum_blodtype = accum_blodtype + blodtype[i]
-    print(accum_blodtype)
+    #print(accum_blodtype)
     n[i] = N - size_accum
-    size_accum = size_accum + n[i]
-    X[i] = rbinom(1, n[i], p[i])    
+    X[i] = rbinom(1, n[i], p[i]) 
+    size_accum = size_accum + X[i]
+    print(size_accum)
 }
 p
+rel_X = X/N
+#0.3420 0.4024 0.0706 0.0353 0.0593 0.0739 0.0117 0.0001 ----- k=1
+#0.339658 0.408662 0.067796 0.034064 0.060183 0.071451 0.012121 0.000638 ---- k=3
+
+#*****************
+# a) rel_X is similar to blodtype 
+# b) precision of 10^2k... is incleasing when k is increasing
+#******************
 
 
 
