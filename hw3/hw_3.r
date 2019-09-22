@@ -9,44 +9,55 @@ lines(expoy, co="blue")
 #plot(myx, geomy, type="h", col="red", lwd=1.5, xlab = "", ylab = "p(x)")
 
 # 2 b)
-myx = seq(1,200,1)
-Ay = dexp(myx-1, rate=1/100)
-By = dexp(myx-1, rate=1/900)
-Zy = dexp(myx-1, rate=1/1000)
-Zy = dexp(myx-1, rate=9/10)
-plot(myx, By, type="l", col="red")
-lines(Zy, co="blue")
-lines(Ay, co="green")
+lambdaA = 1/100
+lambdaB = 1/900
+lambdaU = lambdaA + lambdaB
+avgA = 1/lambdaA
+avgB = 1/lambdaB
+avgU = 1/lambdaU
+range = seq(from = 0, to = 400, by = 10)
+XA = dexp(range, rate=lambdaA)
+XB = dexp(range, rate=lambdaB)
+U = dexp(range, rate=lambdaU)
+plot(range, XA, type = "l", col = "green", main = "exponential distributions",
+     ylab = "probability", xlab = "time")
+lines(range, XB, col = "red")
+lines(range, U, col = "blue")
 
 # 2 c)
 n=10^3
-m=10^3
+m=10^2
 N=n*m
 #i
-Ax = rexp(N, rate=(1/100))
-Bx = rexp(N, rate=(1/900))
+Ax = rexp(N, lambdaA)
+Bx = rexp(N, lambdaB)
 #ii
 ABx = cbind(Ax,Bx)
 U = pmin(Ax, Bx)
-Z = 1*(Bx>Ax)
+#Z = 1*(Bx>Ax)
+Z = ifelse(Ax < Bx, 0, 1)
 U_output = sort(U, index.return=TRUE)
 U_sort = U_output$x
 U_idx = U_output$ix
 Z_sorted = Z[order(U_idx)]
-V = c(1:m)
-Y = c(1:m)
+
+#U_sort <- U[order(U)]
+#Z_sorted <- Z[order(U)]
+
+V = c(rep(0,m))
+Y = c(rep(0,m))
 for (j in 1:m){
     for (i in 1:n) {
         V[j] = V[j] + U_sort[m*(j-1)+i]
         Y[j] = Y[j] + Z_sorted[m*(j-1)+i]        
     }
-    V[j] = (1/m)*V[j]
-    Y[j] = (1/m)*Y[j]
 }
+V = (1/m)*V
+Y = (1/m)*Y
 plot(Y,V)
 
-#plot(c(1:m), V, type="l", col="red")
-#lines(Y, col="blue")
+#***************************
+# The two variables are independent because the plot is caotic. (Looks like 'snow')
 
 #4.5
 N=10^4
