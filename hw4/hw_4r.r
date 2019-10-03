@@ -149,6 +149,7 @@ piHat2 = table(X2)/n
 
 # n) 
 #get pi from eigen vector with eigen value = 1
+library(MASS)
 e = eigen(mP)
 left_vector = ginv(e$vectors)
 pi_eig = left_vector[1,]/sum(left_vector[1,])
@@ -205,7 +206,15 @@ plot(density(t3))
 plot(density(t3[1081:length(t3)]))
 
 #*********** q) see notes ********************
+#6.2
+nP<-matrix(0,3,3)
+nP[1,]<- c(0.7,0.2,0.1)
+nP[2,]<- c(0.0,0.60,0.4)
+nP[3,]<-c(0.5,0.0,0.5)
 
+np2 = nP %*% nP
+np3 = np2 %*% np2
+np4 = np3 %*% nP
 
 
 
