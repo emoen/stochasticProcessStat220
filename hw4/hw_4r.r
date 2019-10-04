@@ -236,5 +236,29 @@ s %*% nu
 
 #************************
 #6.5 b)
+library("expm")
+M = 40
+G_sv_M = mI 
+for (i in 1:M) {
+    G_sv_M = G_sv_M + mR %^% i
+}
+pis = nu %*% G_sv_M
+wtpi = pis / sum(pis)
+#####
+e = eigen(mP)
+left_vector = ginv(e$vectors)
+pi_eig = left_vector[1,]/sum(left_vector[1,])
+sum(pi_eig)
+
+#***************
+# Close enough
+#          [,1]      [,2]     [,3]      [,4]
+#[1,] 0.1956271 0.1339258 0.134995 0.5354522
+#> pi_eig
+#[1] 0.1943463 0.1342756 0.1342756 0.5371025
+#> wtpi-pi_eig
+#            [,1]          [,2]         [,3]         [,4]
+#[1,] 0.001280782 -0.0003498341 0.0007193493 -0.001650297
+
 
 
