@@ -192,18 +192,22 @@ plot(d, col="red")
 mean_expo = mean(tau_time2)
 
 #mean = 1/rate
-rate_expo = 1/mean_expo)
+rate_expo = 1/(mean_expo)
 hist(rexp(L50-1, rate_expo))
 expo_x = (1:(L50-1))
 expo_y = dexp((1:length(tau_time2)), rate=(rate_expo))
+geom_y = dgeom(1:length(tau_time2), (rate_expo))
 #plot(x=expo_x, y=expo_y, type='l')
 lines(expo_y)
+lines(geom_y)
 
 t2 = tau_time2[order(tau_time2)]
 #remove all 1's
 t3 = t2[2285:(L50-1)]
 plot(density(t3))
 plot(density(t3[1081:length(t3)]))
+
+plot(1:(50*365), X2[order(X2)], type="l")
 
 #*********** q) see notes ********************
 #6.2
@@ -216,5 +220,21 @@ np2 = nP %*% nP
 np3 = np2 %*% np2
 np4 = np3 %*% nP
 
+#************************
+#6.5 a)
+nu = t(mP[1,])         # the first row vector of mP
+mI = diag(rep(1,4))    # unit matrix
+s = mI[,1]             # first unit vector, e_1, in R**4
+msnu = s %*% nu
+mR = mP - msnu
+
+mP # P
+mR # R
+s  # = e_0
+nu # =v
+s %*% nu
+
+#************************
+#6.5 b)
 
 
