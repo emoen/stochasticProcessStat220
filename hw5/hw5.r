@@ -73,7 +73,21 @@ simulate_plot(init, mP, S, iter)
 #########
 # c)
 qq = 1-PP
-cumProd = (1/qq)*(PP/qq)^(N-3)*(PP)
-piK = 
+
+Phi = rep(0, N)
+Phi[1] = 1
+Phi[2] = 1/qq
+if ( N>3) {
+    for (i in 3:(N-1)) {
+        Phi[i] = Phi[i-1]* (PP/qq)
+    }
+}
+Phi[N] = Phi[N-1]*PP
+
+acumSum = sum(Phi)
+Pi_k = rep(0, N)
+for ( i in 1:N) {
+    Pi_k[i] = Phi[i] / acumSum
+}
 
 
