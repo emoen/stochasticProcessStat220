@@ -71,7 +71,7 @@ S = record$SN
 simulate_plot(init, mP, S, iter)
 
 #########
-# c)
+# c Implement (4) and find pi_0 .. pi_n
 qq = 1-PP
 
 Phi = rep(0, N)
@@ -89,5 +89,47 @@ Pi_k = rep(0, N)
 for ( i in 1:N) {
     Pi_k[i] = Phi[i] / acumSum
 }
+
+######################
+# 8.3 c -d
+######################
+aaa =  matrix(0,6,6)
+aaa[1,] = c(1/6,1/6,1/6,1/6,1/6,1/6)
+aaa[2,] = c(1/4, 1/4, 1/4, 0, 1/4, 0)
+aaa[3,] = c(0,0,1/3, 2/3, 0,0)
+aaa[4,] = c(0,0,2/3, 1/3, 0,0)
+aaa[5,] = c(0,0,0,0,1/4, 3/4)
+aaa[6,] = c(0,0,0,0,1/5,4/5)
+
+init= aaa[1,]
+n=10000
+S=c(1:6)
+X = c(rep(0,n+1))
+X[1]<-sample(S,1, prob=init )
+for(k in 2:(n+1)) {
+    X[k] = sample(S,1, prob=mmp[X[k-1],] )
+}
+X = X[-1]
+empirical_freq = table(X)/n
+
+#################
+# 8.2
+################
+mmp = matrix(0,3,3)
+mmp[1,] = c(0.5,0.5,0)
+mmp[2,] = c(0.5,0,0.5)
+mmp[3,] = c(0,0.25, 0.75)
+init= c(0.33,0.33,0.33)
+n=10000
+S=c(1:3)
+X = c(rep(0,n+1))
+X[1]<-sample(S,1, prob=init )
+for(k in 2:(n+1)) {
+    X[k] = sample(S,1, prob=mmp[X[k-1],] )
+}
+X = X[-1]
+empirical_freq = table(X)/n
+
+
 
 
