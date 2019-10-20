@@ -101,16 +101,57 @@ aaa[4,] = c(0,0,2/3, 1/3, 0,0)
 aaa[5,] = c(0,0,0,0,1/4, 3/4)
 aaa[6,] = c(0,0,0,0,1/5,4/5)
 
+
+aaa_2 = aaa %*% aaa
+for (i in 1:10) {  # 2^11 = 2048
+    aaa_2 = aaa_2 %*% aaa_2
+}
+print(aaa_2)
+
 init= aaa[1,]
-n=10000
+n=100
 S=c(1:6)
 X = c(rep(0,n+1))
 X[1]<-sample(S,1, prob=init )
+X[1] = 2
 for(k in 2:(n+1)) {
-    X[k] = sample(S,1, prob=mmp[X[k-1],] )
+    print(X)
+    X[k] = sample(S,1, prob=aaa[X[k-1],] )
 }
 X = X[-1]
 empirical_freq = table(X)/n
+
+###########
+U = matrix(0,2,4)
+U[1,] = c(0.43,0.07,0.43,0.07)
+U[2,] = c(0.29,0.21,0.29,0.21)
+
+y_1=c(0.5,0.5)
+y_2=c(0.5,0.5)
+y_1 = t(t(y_1))
+y_2 = t(t(y_2))
+
+#### incorrect #####
+aaa_C = matrix(0,2,2)
+aaa_C[1,]=c(1/3,2/3)
+aaa_C[2,]=c(1,1)#c(2/3,1/3)
+
+id=matrix(0,2,2)
+id[1,1]=1
+id[2,2]=1
+
+solve((id-aaa_C), c(0,1))
+
+aaa_D = matrix(0,2,2)
+aaa_D[1,]=c(1/4,3/4)
+aaa_D[2,]=c(1/5,4/5)
+##### end incorrect #######
+
+####
+# d)
+####
+z_0 = c(0.5, 0.5)
+aaa[1:2,1:2] %*% z_0
 
 #################
 # 8.2
