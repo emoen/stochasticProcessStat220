@@ -90,6 +90,25 @@ for ( i in 1:N) {
     Pi_k[i] = Phi[i] / acumSum
 }
 
+#########
+# d 
+M= 1000
+init= c(rep(1/10, 10))
+S=c(1:10)
+X = c(rep(0,M+1))
+X[1]<-sample(S,1, prob=init )
+for(k in 2:(M+1)) {
+    X[k] = sample(S,1, prob=mP[X[k-1],] )
+}
+X = X[-1]
+empirical_freq = table(X)/M
+
+#> sum(abs(Pi_k - empirical_freq))
+#[1] 0.1360737
+# 'close - ich'
+#########
+
+
 ######################
 # 8.3 c -d
 ######################
