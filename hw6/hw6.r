@@ -10,19 +10,23 @@
 
 lambdaExp = 2
 t=10
-T = c(rep(0, t)) # inter-arrival time - exponential distributed
-for (i in c(1:t)){
+n=100
+T = c(rep(0, n)) # inter-arrival time - exponential distributed
+for (i in c(1:n)){
     T[i] = rexp(1, rate = lambdaExp) #sample for exponential dist
 }
-plot(c(1:t), T)
+plot(c(1:n), T)
 
-S = c(rep(0, t)) # arrival times - gamma distributed
+#any arrival process can also be specified by two alternative stochastic processes.
+#The first alternative is the sequence of interarrival times S_n
+S = c(rep(0, n)) # arrival times - gamma distributed
 S[1] = T[1]
-for (i in c(2:t)){
+for (i in c(2:n)){
     S[i]= S[i-1] + T[i]
 }
-plot(c(1:t), S)
+plot(c(1:n), S)
 
+#2nd alternative - an arrival process is the counting process X(t)
 X = c(rep(0,t)) # number of arrivals up to time t - poisson process distributed (lambda*t)
 for (i in c(1:t)){
     for (j in c(1:t)) {
@@ -57,3 +61,36 @@ for ( i in c(2:t)){
 }
 jumpsNumber
 plot(c(1:t), poissonProcess)
+
+#################################
+# method 1
+sim_pp1 = function(t, rate) { 
+    path = matrix(0, nrow = 1, ncol = 2)
+    jumps_time = rexp(1, rate)
+    while(jumps_time[length(jumps_time)] < t) {
+        jump = matrix(c(jumps_time[length(jumps_time)], path[nrow(path), 2],
+                         jumps_time[length(jumps_time)], path[nrow(path), 2]  + 1),
+                       nrow = 2, ncol = 2, byrow = TRUE)
+        path = rbind(path, jump)
+        
+        jumps_time = c(jumps_time, jumps_time[length(jumps_time)] + rexp(1, rate))
+    }
+    path = rbind(path, c(t, path[nrow(path), 2]))
+    list(path, jumps_time)
+}
+
+path1 = sim_pp1(10, 2)
+
+arrivalTime = path1[[1]]
+plot(arrivalTime)
+abline(0,1)
+
+jumps = path1[[2]]
+plot(jumps, c(1:length(jumps))
+abline(0,1)
+
+mean(diff(path1[[2]])); var(diff(path1[[2]]))
+# [1] 1.029312
+# [1] 0.9722406
+
+#method2
