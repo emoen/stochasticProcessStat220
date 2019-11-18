@@ -1,6 +1,3 @@
-#12.2 d)
-plot( dpois( x=0:5, lambda=2 ))
-
 #Function for simulating repairman problem
 simulate.repairman <- function(n=100,lambda=2, mu=1, x0 = 6, R = 1){
     # n - numeric of transitions# lambda - birth rate
@@ -39,3 +36,47 @@ lambda = 2
 mu = 1
 X <- simulate.repairman(n=100,lambda=lambda, mu=mu, x0 = 6, R=1)
 plot(X, type="s")
+
+# f) 
+n1=10000
+Y <- simulate.repairman(n=n1,lambda=lambda, mu=mu, x0 = 6, R=1)
+plot(X, type="s")
+
+time_steps = Y[,1]
+dt=diff(time_steps) # dt[x] = time_steps[x+1] - time_steps[x]. E.g step 8 entered state 1. df[8]=0.6481629 time spendt in state 1 (until enter state 2 or 0)
+cumtime_in_states = rep(0,6) 
+for(i in 1:6){
+    array_step_x_entered_state_i = which(Y[-n1,2]==i) 
+    cumtime_in_states[i] = sum(dt[array_step_x_entered_state_i])
+}
+l= cumtime_in_states
+#dpois - PMF gives the (log) density - poisson
+#ppois - CMF Cumulative Probability Function
+pi_theoretic = dpois(0:5,lambda=lambda/mu)/ppois(5,lambda=lambda/mu) # pi := PMF/CMF == truncated poisson at N=5
+rbind(l/sum(l), pi_theoretic)
+
+#12.2 d)
+plot( dpois( x=0:5, lambda=2 ))
+dat = data.frame(x=c(0,1,2,3,4,5), y=pi_theoretic)
+hist(pi_theoretic)
+
+# g) / h)
+# 1) empirical avg machines operated
+# 2)               machine utilization
+# 3)               idle repair time - no machines working
+
+total_time = sum(l)
+emp_machines_op = sum(l*0:5/total_time) # E[M] = sum( i * total_time[i] ), i:0..5
+emp_util = sum(l*c(0:5)/5/sum(l)) # Utilization 
+emp_state_0 = l[6]/total_time
+
+#Theoretic time
+machines_op = sum(pi_theoretic * (0:5) ) # E[M] = sum( i * total_time[i] ), i:0..5
+util = sum(pi_theoretic*(0:5)/5)         # pi * state_i / num_states_of_utility
+state_0 = pi_theoretic[6] # state of zero utility
+comparison = matrix(c(emp_machines_op, emp_util, emp_state_0, machines_op, util, state_0),nrow=3,ncol=2)
+
+#
+
+
+
