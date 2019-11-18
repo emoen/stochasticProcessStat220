@@ -76,7 +76,50 @@ util = sum(pi_theoretic*(0:5)/5)         # pi * state_i / num_states_of_utility
 state_0 = pi_theoretic[6] # state of zero utility
 comparison = matrix(c(emp_machines_op, emp_util, emp_state_0, machines_op, util, state_0),nrow=3,ncol=2)
 
-#
+# j)
+n1=10000
+Y <- simulate.repairman(n=n1,lambda=lambda, mu=mu, x0 = 6, R=2)
+plot(X, type="s")
+
+################## get new statistics ########################
+time_steps = Y[,1]
+dt=diff(time_steps) # dt[x] = time_steps[x+1] - time_steps[x]. E.g step 8 entered state 1. df[8]=0.6481629 time spendt in state 1 (until enter state 2 or 0)
+cumtime_in_states = rep(0,6) 
+for(i in 1:6){
+    array_step_x_entered_state_i = which(Y[-n1,2]==i) 
+    cumtime_in_states[i] = sum(dt[array_step_x_entered_state_i])
+}
+l= cumtime_in_states
+
+total_time2 = sum(l)
+emp_machines_op2 = sum(l*0:5/total_time) # E[M] = sum( i * total_time[i] ), i:0..5
+emp_util2 = sum(l*c(0:5)/5/sum(l)) # Utilization 
+emp_state_02 = l[6]/total_time
+
+#Theoretic time
+machines_op2 = sum(pi_theoretic * (0:5) ) # E[M] = sum( i * total_time[i] ), i:0..5
+util2 = sum(pi_theoretic*(0:5)/5)         # pi * state_i / num_states_of_utility
+state_02 = pi_theoretic[6] # state of zero utility
+comparison2 = matrix(c(emp_machines_op2, emp_util2, emp_state_02, machines_op2, util2, state_02),nrow=3,ncol=2)
+##################################################################
+
+> comparison2
+           [,1]       [,2]
+[1,] 1.94542510 1.92660550
+[2,] 0.60533441 0.38532110
+[3,] 0.06840811 0.03669725
+> comparison
+           [,1]       [,2]
+[1,] 2.06377724 1.92660550
+[2,] 0.41275545 0.38532110
+[3,] 0.02662338 0.03669725
+> 
+
+# k)
+# Doesnt change theoretical PI as num repairmen isnt used in calculation
+
+# A second repairman encrease utilization and also zero-utility/idle repairtime
+
 
 
 
